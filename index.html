@@ -36,10 +36,9 @@
             padding-top: var(--safe-area-top);
         }
 
-        /* --- HEADER CORRIGÉ --- */
         header {
             display: grid;
-            grid-template-columns: 60px 1fr 60px; /* Grille pour centrer parfaitement le titre */
+            grid-template-columns: 60px 1fr 60px;
             align-items: center;
             padding: 10px 15px;
             background: rgba(0, 0, 0, 0.3);
@@ -59,7 +58,7 @@
 
         #btn-home-icon {
             grid-column: 1;
-            background: rgba(255, 255, 255, 0.1); /* Petit fond pour visibilité */
+            background: rgba(255, 255, 255, 0.1);
             border: none;
             width: 40px; height: 40px;
             border-radius: 50%;
@@ -69,7 +68,6 @@
             cursor: pointer;
         }
 
-        /* --- VUES --- */
         .view {
             flex-grow: 1; padding: 20px; display: none;
             flex-direction: column; overflow-y: auto;
@@ -108,9 +106,8 @@
         .spacer { flex-grow: 1; }
         .text-center { text-align: center; }
 
-        /* --- ZOOM MOTS SECRETS --- */
         .important-zoom {
-            font-size: 2.8rem; /* ÉNORME ZOOM */
+            font-size: 2.8rem;
             font-weight: 900;
             color: var(--green);
             margin: 20px 0;
@@ -121,7 +118,6 @@
 
         .distrib-label { font-size: 1.2rem; opacity: 0.7; margin-bottom: 5px; }
 
-        /* --- MODALS --- */
         .modal-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.94); z-index: 1000;
@@ -153,27 +149,23 @@
                 <button class="btn-green" style="width: 70px; padding: 14px;" onclick="addPlayer()">+</button>
             </div>
         </div>
-
         <div id="players-list"></div>
-
         <div class="spacer"></div>
-
         <div id="setup-controls">
             <div id="score-setting-container" class="setting-box row">
-                <span>🏆 Objectif de points</span>
+                <span>🏆 Objectif</span>
                 <div class="row">
                     <div class="counter-btn" onclick="updateScoreLimit(-5)">-</div>
-                    <span id="score-limit-display" style="min-width: 40px; text-align: center; font-weight: bold; font-size: 1.2rem;">20</span>
+                    <span id="score-limit-display" style="min-width: 40px; text-align: center; font-weight: bold;">20</span>
                     <div class="counter-btn" onclick="updateScoreLimit(5)">+</div>
                 </div>
             </div>
-
             <div id="role-setting-container" class="setting-box">
                 <div class="row" style="margin-bottom: 15px;">
                     <span>🕵️ Undercovers</span>
                     <div class="row">
                         <div class="counter-btn" onclick="updateCount('undercover', -1)">-</div>
-                        <span id="count-undercover" style="min-width: 30px; text-align: center; font-weight: bold;">1</span>
+                        <span id="count-undercover" style="min-width: 30px; text-align: center;">1</span>
                         <div class="counter-btn" onclick="updateCount('undercover', 1)">+</div>
                     </div>
                 </div>
@@ -181,28 +173,23 @@
                     <span>🤡 Mr. White</span>
                     <div class="row">
                         <div class="counter-btn" onclick="updateCount('white', -1)">-</div>
-                        <span id="count-white" style="min-width: 30px; text-align: center; font-weight: bold;">0</span>
+                        <span id="count-white" style="min-width: 30px; text-align: center;">0</span>
                         <div class="counter-btn" onclick="updateCount('white', 1)">+</div>
                     </div>
                 </div>
             </div>
         </div>
-
         <button class="btn-primary" id="btn-start" onclick="startGame()" disabled>LANCER LA MANCHE</button>
     </div>
 
     <div id="view-distribution" class="view">
         <div class="spacer"></div>
         <div class="text-center">
-            <div id="first-player-msg" style="color: var(--green); font-weight: 900; font-size: 1.3rem; margin-bottom: 20px; display:none;">🌟 TU COMMENCES !</div>
             <div class="distrib-label">Au tour de</div>
             <div id="distrib-player-name" style="font-size: 3rem; color: var(--accent); font-weight: 900; margin-bottom: 10px;">Joueur</div>
             <p style="opacity: 0.6;">Regarde seul ton secret</p>
         </div>
-        
-        <div id="secret-area" style="display:none;" class="card text-center">
-            </div>
-
+        <div id="secret-area" style="display:none;" class="card text-center"></div>
         <div class="spacer"></div>
         <button id="btn-reveal" class="btn-red" onclick="revealSecret()">RÉVÉLER MON SECRET</button>
         <button id="btn-next-player" class="btn-blue" style="display:none;" onclick="nextDistribution()">JOUEUR SUIVANT</button>
@@ -220,7 +207,6 @@
             🏆 VICTOIRE FINALE<br>
             <span id="grand-winner-name" style="font-size: 2.2rem;"></span>
         </div>
-
         <div class="card text-center">
             <h2 id="winner-message" style="margin: 0 0 20px 0; color: var(--accent); font-size: 1.8rem;"></h2>
             <div style="text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
@@ -234,7 +220,6 @@
                 </div>
             </div>
         </div>
-        
         <div id="scores-list"></div>
         <div class="spacer"></div>
         <button id="btn-next-round" class="btn-primary" onclick="resetGame(false)">MANCHE SUIVANTE</button>
@@ -244,7 +229,6 @@
     <div id="home-confirm-modal" class="modal-overlay">
         <div class="card" style="width: 100%; text-align: center;">
             <h3>Quitter la partie ?</h3>
-            <p style="opacity: 0.6; margin-bottom: 25px;">Toute la progression sera perdue.</p>
             <button class="btn-red" onclick="goHome()">OUI, QUITTER</button>
             <button class="btn-blue" onclick="closeHomeModal()">ANNULER</button>
         </div>
@@ -252,24 +236,27 @@
 
     <div id="mr-white-modal" class="modal-overlay">
         <div class="card" style="width: 100%; text-align: center;">
-            <h2 style="color: var(--red); font-size: 2rem; margin-bottom: 10px;">DÉMASQUÉ !</h2>
-            <p style="font-size: 1.1rem; margin-bottom: 20px;"><b id="white-name" style="color:var(--accent)"></b>, devine le mot des civils :</p>
+            <h2 style="color: var(--red);">DÉMASQUÉ !</h2>
+            <p><b id="white-name" style="color:var(--accent)"></b>, devine le mot des civils :</p>
             <input type="text" id="white-guess-input" placeholder="Ton guess..." autocomplete="off">
-            <button class="btn-green" onclick="validateWhiteGuess()">VALIDER LE GUESS</button>
+            <button class="btn-green" onclick="validateWhiteGuess()">VALIDER</button>
         </div>
     </div>
 </div>
 
 <script>
-    /* LOGIQUE JS */
-    const database = [["Guitare", "Violon"], ["Bière", "Cidre"], ["Lion", "Tigre"], ["Pomme", "Poire"], ["Plage", "Piscine"], ["Facebook", "Twitter"], ["Harry Potter", "Seigneur des Anneaux"], ["McDonald's", "Burger King"], ["Paris", "Londres"], ["Soleil", "Lune"], ["Chien", "Chat"], ["Voiture", "Moto"], ["Thé", "Café"], ["Foot", "Rugby"], ["Piano", "Clavier"], ["Stylo", "Crayon"], ["Montre", "Horloge"], ["Bateau", "Paquebot"], ["Avion", "Hélicoptère"], ["Pantalon", "Short"], ["Chemise", "T-shirt"], ["Lunettes", "Lentilles"], ["Chaise", "Tabouret"], ["Lit", "Canapé"], ["Douche", "Bain"], ["Banane", "Kiwi"], ["Orange", "Clémentine"], ["Or", "Argent"], ["Diamant", "Rubis"], ["Coca", "Pepsi"], ["Netflix", "YouTube"], ["Uber", "Taxi"], ["Chocolat", "Vanille"], ["Pain", "Brioche"], ["Pizza", "Pâtes"], ["Fromage", "Yaourt"], ["Vin", "Champagne"], ["Noël", "Nouvel An"], ["Mariage", "PACS"], ["École", "Université"], ["Professeur", "Élève"], ["Docteur", "Infirmier"], ["Police", "Pompier"], ["Roi", "Président"], ["Château", "Manoir"], ["Forêt", "Jungle"], ["Montagne", "Colline"], ["Neige", "Glace"], ["Pluie", "Orage"], ["Vent", "Tempête"], ["Rivière", "Fleuve"], ["Désert", "Plage"], ["Volcan", "Montagne"], ["Cinéma", "Théâtre"], ["Bar", "Boîte de nuit"], ["Bibliothèque", "Librairie"], ["Musée", "Galerie"], ["Hôtel", "Camping"], ["Prison", "Cachot"], ["Abeille", "Guêpe"], ["Crocodile", "Alligator"], ["Chouette", "Hibou"], ["Cheval", "Poney"], ["Lapin", "Lièvre"], ["Dauphin", "Requin"], ["Aigle", "Faucon"], ["Moustique", "Mouche"], ["Loup", "Renard"], ["Superman", "Batman"], ["Père Noël", "Lutin"], ["Vampire", "Loup-garou"], ["Ange", "Démon"], ["Sorcier", "Magicien"], ["Pirate", "Marin"], ["Ninja", "Samouraï"], ["Savon", "Shampoing"], ["Brosse à dents", "Dentifrice"], ["Four", "Micro-ondes"], ["Frigo", "Congélateur"], ["Lampe", "Bougie"], ["Miroir", "Vitre"], ["Clé", "Serrure"], ["Ketchup", "Mayonnaise"], ["Sel", "Poivre"], ["Sucre", "Miel"], ["Crêpe", "Gaufre"], ["Pain au chocolat", "Chocolatine"], ["Sushi", "Maki"], ["Riz", "Pâte"], ["Salade", "Épinard"], ["Eau plate", "Eau gazeuse"], ["Thon", "Saumon"], ["Poulet", "Dinde"]];
+    const database = [
+        ["Guitare", "Violon"], ["Bière", "Cidre"], ["Lion", "Tigre"], ["Pomme", "Poire"], ["Plage", "Piscine"], ["Facebook", "Twitter"], ["Harry Potter", "Seigneur des Anneaux"], ["McDonald's", "Burger King"], ["Paris", "Londres"], ["Soleil", "Lune"], ["Chien", "Chat"], ["Voiture", "Moto"], ["Thé", "Café"], ["Foot", "Rugby"], ["Piano", "Clavier"], ["Stylo", "Crayon"], ["Montre", "Horloge"], ["Bateau", "Paquebot"], ["Avion", "Hélicoptère"], ["Pantalon", "Short"], ["Chemise", "T-shirt"], ["Lunettes", "Lentilles"], ["Chaise", "Tabouret"], ["Lit", "Canapé"], ["Douche", "Bain"], ["Banane", "Kiwi"], ["Orange", "Clémentine"], ["Or", "Argent"], ["Diamant", "Rubis"], ["Coca", "Pepsi"], ["Netflix", "YouTube"], ["Uber", "Taxi"], ["Chocolat", "Vanille"], ["Pain", "Brioche"], ["Pizza", "Pâtes"], ["Fromage", "Yaourt"], ["Vin", "Champagne"], ["Noël", "Nouvel An"], ["Mariage", "PACS"], ["École", "Université"], ["Professeur", "Élève"], ["Docteur", "Infirmier"], ["Police", "Pompier"], ["Roi", "Président"], ["Château", "Manoir"], ["Forêt", "Jungle"], ["Montagne", "Colline"], ["Neige", "Glace"], ["Pluie", "Orage"], ["Vent", "Tempête"], ["Rivière", "Fleuve"], ["Désert", "Plage"], ["Volcan", "Montagne"], ["Cinéma", "Théâtre"], ["Bar", "Boîte de nuit"], ["Bibliothèque", "Librairie"], ["Musée", "Galerie"], ["Hôtel", "Camping"], ["Prison", "Cachot"], ["Abeille", "Guêpe"], ["Crocodile", "Alligator"], ["Chouette", "Hibou"], ["Cheval", "Poney"], ["Lapin", "Lièvre"], ["Dauphin", "Requin"], ["Aigle", "Faucon"], ["Moustique", "Mouche"], ["Loup", "Renard"], ["Superman", "Batman"], ["Père Noël", "Lutin"], ["Vampire", "Loup-garou"], ["Ange", "Démon"], ["Sorcier", "Magicien"], ["Pirate", "Marin"], ["Ninja", "Samouraï"], ["Savon", "Shampoing"], ["Brosse à dents", "Dentifrice"], ["Four", "Micro-ondes"], ["Frigo", "Congélateur"], ["Lampe", "Bougie"], ["Miroir", "Vitre"], ["Clé", "Serrure"], ["Ketchup", "Mayonnaise"], ["Sel", "Poivre"], ["Sucre", "Miel"], ["Crêpe", "Gaufre"], ["Pain au chocolat", "Chocolatine"], ["Sushi", "Maki"], ["Riz", "Pâte"], ["Salade", "Épinard"], ["Eau plate", "Eau gazeuse"], ["Thon", "Saumon"], ["Poulet", "Dinde"],
+        ["Tapis", "Moquette"], ["Rideau", "Store"], ["Coussin", "Oreiller"], ["Valise", "Sac à dos"], ["Montre", "Chrono"], ["Bracelet", "Bague"], ["Collier", "Pendentif"], ["Casquette", "Bonnet"], ["Gants", "Moufle"], ["Écharpe", "Foulard"], ["Parapluie", "Parasol"], ["Savon", "Gel douche"], ["Mousse", "Crème"], ["Rasoir", "Tondeuse"], ["Miroir", "Glace"], ["Peigne", "Brosse"], ["Sèche-cheveux", "Lisseur"], ["Ciseaux", "Cutter"], ["Colle", "Scotch"], ["Marteau", "Tournevis"], ["Clou", "Vis"], ["Pince", "Tenaille"], ["Scie", "Hache"], ["Pelle", "Râteau"], ["Arrosoir", "Tuyau"], ["Gazon", "Pelouse"], ["Fleur", "Plante"], ["Arbre", "Arbuste"], ["Forêt", "Bois"], ["Mer", "Océan"], ["Lac", "Étang"], ["Vague", "Marée"], ["Sable", "Galet"], ["Coquillage", "Crustacé"], ["Poisson", "Baleine"], ["Oiseau", "Papillon"], ["Fourmi", "Araignée"], ["Singe", "Gorille"], ["Éléphant", "Rhinocéros"], ["Girafe", "Zèbre"], ["Ours", "Panda"], ["Pingouin", "Manchot"], ["Kangourou", "Koala"], ["Vache", "Taureau"], ["Mouton", "Chèvre"], ["Cochon", "Sanglier"], ["Canard", "Oie"], ["Poule", "Coq"], ["Souris", "Rat"], ["Hamster", "Cochon d'inde"], ["Serpent", "Lézard"], ["Tortue", "Grenouille"], ["Escargot", "Limace"], ["Livre", "Magazine"], ["Journal", "BD"], ["Roman", "Poésie"], ["Dessin", "Peinture"], ["Photo", "Vidéo"], ["Caméra", "Appareil photo"], ["Radio", "Podcasts"], ["Musique", "Chant"], ["Danse", "Ballet"], ["Opéra", "Cirque"], ["Magie", "Illusion"], ["Jeu", "Jouet"], ["Poupée", "Figurine"], ["Puzzle", "Lego"], ["Cartes", "Dés"], ["Échecs", "Dames"], ["Billard", "Bowling"], ["Fléchettes", "Ping-pong"], ["Tennis", "Badminton"], ["Basket", "Handball"], ["Vélo", "VTT"], ["Ski", "Surf"], ["Luge", "Patin"], ["Boxe", "Karaté"], ["Yoga", "Pilates"], ["Course", "Marche"], ["Nage", "Plongée"], ["Pêche", "Chasse"], ["Cuisine", "Pâtisserie"], ["Recette", "Menu"], ["Restaurant", "Bistro"], ["Café", "Taverne"], ["Boulangerie", "Pâtisserie"], ["Boucherie", "Charcuterie"], ["Épicerie", "Marché"], ["Supermarché", "Hypermarché"], ["Boutique", "Magasin"], ["Centre commercial", "Galerie"], ["Mairie", "Préfecture"], ["Banque", "Assurance"], ["Poste", "Courrier"], ["Lettre", "Colis"], ["Timbre", "Enveloppe"], ["Téléphone", "Smartphone"], ["Tablette", "Ordinateur"], ["Écran", "Moniteur"], ["Souris", "Clavier"], ["Imprimante", "Scanner"], ["Internet", "Wifi"], ["Site", "Blog"], ["Email", "SMS"], ["Mot de passe", "Identifiant"], ["Logiciel", "Appli"], ["Fenêtre", "Porte"], ["Toit", "Mur"], ["Sol", "Plafond"], ["Escalier", "Ascenseur"], ["Balcon", "Terrasse"], ["Jardin", "Cour"], ["Garage", "Parking"], ["Cave", "Grenier"], ["Cuisine", "Salon"], ["Chambre", "Bureau"], ["Bain", "Toilette"], ["Évier", "Lavabo"], ["Robinet", "Pommeau"], ["Prise", "Interrupteur"], ["Ampoule", "Néon"], ["Radiateur", "Poêle"], ["Clim", "Ventilo"], ["Balai", "Aspirateur"], ["Chiffon", "Éponge"], ["Seau", "Bassine"], ["Lessive", "Adoucissant"], ["Fer à repasser", "Vapeur"], ["Casserole", "Poêle"], ["Marmite", "Wok"], ["Plat", "Assiette"], ["Verre", "Coupe"], ["Fourchette", "Cuillère"], ["Couteau", "Lame"], ["Serviette", "Nappe"], ["Pain", "Baguette"], ["Beurre", "Margarine"], ["Lait", "Crème"], ["Oeuf", "Omelette"], ["Farine", "Semoule"], ["Pâte", "Nouille"], ["Riz", "Grain"], ["Pomme de terre", "Frites"], ["Carotte", "Navet"], ["Tomate", "Poivron"], ["Oignon", "Ail"], ["Herbe", "Épice"], ["Sel", "Gros sel"], ["Poivre", "Piment"], ["Huile", "Vinaigre"], ["Moutarde", "Raifort"], ["Confiture", "Gelée"], ["Miel", "Sirop"], ["Gâteau", "Tarte"], ["Biscuit", "Cookie"], ["Bonbon", "Sucette"], ["Glace", "Sorbet"], ["Fruit", "Légume"], ["Jus", "Sirop"], ["Soda", "Limonade"], ["Cocktail", "Mocktail"], ["Alcool", "Spiritueux"], ["Rhum", "Whisky"], ["Vodka", "Gin"], ["Tequila", "Mezcal"], ["Lundi", "Mardi"], ["Matin", "Soir"], ["Jour", "Nuit"], ["Heure", "Minute"], ["Seconde", "Instant"], ["Hier", "Demain"], ["Semaine", "Mois"], ["Année", "Siècle"], ["Printemps", "Automne"], ["Été", "Hiver"], ["Chaud", "Froid"], ["Sec", "Humide"], ["Vite", "Lent"], ["Grand", "Petit"], ["Gros", "Mince"], ["Beau", "Joli"], ["Fort", "Puissant"], ["Riche", "Fortuné"], ["Jeune", "Vieux"], ["Nouveau", "Ancien"], ["Premier", "Dernier"], ["Vrai", "Réel"], ["Bon", "Excellent"], ["Mieux", "Meilleur"]
+    ];
+
     let players = [], config = { undercovers: 1, whites: 0, winningScore: 20 }, currentCivilWord = "", currentUnderWord = "", distributionIndex = 0, playerBeingEliminated = null, gameInProgress = false;
 
     function addPlayer() {
         const input = document.getElementById('new-player-input');
         const name = input.value.trim();
         if (name) {
-            players.push({ id: Date.now()+Math.random(), name, role: null, word: null, eliminated: false, score: 0, lastPoints: 0 });
+            players.push({ id: Date.now()+Math.random(), name, role: null, word: null, eliminated: false, score: 0, lastPoints: 0, isStarter: false });
             input.value = ""; renderPlayersList(); autoAdjustRoles();
         }
     }
@@ -300,9 +287,7 @@
 
     function startGame() {
         gameInProgress = true;
-        players.forEach(p => { p.eliminated = false; p.lastPoints = 0; });
-        const offset = Math.floor(Math.random() * players.length);
-        players = players.slice(offset).concat(players.slice(0, offset));
+        players.forEach(p => { p.eliminated = false; p.lastPoints = 0; p.isStarter = false; });
         
         const pair = database[Math.floor(Math.random() * database.length)];
         currentCivilWord = pair[0]; currentUnderWord = pair[1];
@@ -318,19 +303,12 @@
             p.word = (p.role === 'Civil') ? currentCivilWord : (p.role === 'Undercover' ? currentUnderWord : null);
         });
 
-        if (players[0].role === 'Mr. White') {
-            const swapIdx = players.findIndex(p => p.role !== 'Mr. White');
-            [players[0].role, players[swapIdx].role] = [players[swapIdx].role, players[0].role];
-            [players[0].word, players[swapIdx].word] = [players[swapIdx].word, players[0].word];
-        }
-
         distributionIndex = 0; switchView('view-distribution'); updateDistributionView();
     }
 
     function updateDistributionView() {
         const p = players[distributionIndex];
         document.getElementById('distrib-player-name').innerText = p.name;
-        document.getElementById('first-player-msg').style.display = (distributionIndex === 0) ? 'block' : 'none';
         document.getElementById('secret-area').style.display = 'none';
         document.getElementById('btn-reveal').style.display = 'block';
         document.getElementById('btn-next-player').style.display = 'none';
@@ -350,11 +328,17 @@
 
     function nextDistribution() {
         if (++distributionIndex < players.length) updateDistributionView();
-        else { switchView('view-game'); setupGameView(); }
+        else { 
+            const civils = players.filter(p => p.role === 'Civil');
+            civils[Math.floor(Math.random() * civils.length)].isStarter = true;
+            switchView('view-game'); 
+            setupGameView(); 
+        }
     }
 
     function setupGameView() {
-        document.getElementById('starter-name-text').innerText = `🌟 ${players[0].name} COMMENCE !`;
+        const starter = players.find(p => p.isStarter);
+        document.getElementById('starter-name-text').innerText = `🌟 ${starter.name} COMMENCE !`;
         renderGamePlayers();
     }
 
@@ -393,6 +377,15 @@
         const active = players.filter(p => !p.eliminated);
         const impostors = active.filter(p => p.role !== 'Civil').length;
         const civils = active.filter(p => p.role === 'Civil').length;
+        const undercovers = active.filter(p => p.role === 'Undercover').length;
+
+        // RÈGLE : 1 Undercover vs 1 Civil = Victoire Undercover
+        if (active.length === 2 && undercovers === 1 && civils === 1) {
+            active.filter(p => p.role === 'Undercover').forEach(p => { p.score += 10; p.lastPoints = 10; });
+            endGame("🕵️ VICTOIRE UNDERCOVER (Duel final !)");
+            return;
+        }
+
         if (impostors === 0) {
             players.filter(p => !p.eliminated).forEach(p => { p.score += 2; p.lastPoints = 2; });
             endGame("🎉 VICTOIRE DES CIVILS !");
