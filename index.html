@@ -28,14 +28,13 @@
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            /* Changé pour permettre le scroll sur tous les écrans */
             overflow-x: hidden;
             overflow-y: auto;
         }
 
         #app-container {
             width: 100%;
-            max-width: 500px; /* Taille mobile par défaut */
+            max-width: 500px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -43,7 +42,6 @@
             padding-top: var(--safe-area-top);
         }
 
-        /* --- ADAPTATION TABLETTE / ÉCRANS LARGES --- */
         @media (min-width: 768px) {
             #app-container { max-width: 850px; }
             .player-grid {
@@ -292,13 +290,12 @@
         currentCivilWord = pair[0];
         currentUnderWord = pair[1];
 
-        // Construction et mélange des rôles
         let roles = [];
         for(let i=0; i<config.undercovers; i++) roles.push('Undercover');
         for(let i=0; i<config.whites; i++) roles.push('Mr. White');
         while(roles.length < players.length) roles.push('Civil');
         
-        roles.sort(() => Math.random() - 0.5); // Mélange simple
+        roles.sort(() => Math.random() - 0.5);
 
         players.forEach((p, i) => {
             p.role = roles[i];
@@ -340,7 +337,6 @@
     }
 
     function startDiscussion() {
-        // Sélection d'un Civil au hasard pour commencer
         const civils = players.filter(p => p.role === 'Civil');
         const starter = civils[Math.floor(Math.random() * civils.length)];
         
@@ -427,10 +423,16 @@
         switchView('view-gameover');
     }
 
+    // FONCTION MODIFIÉE : Si "full" est faux, on relance direct startGame()
     function resetGame(full) {
-        if (full) players.forEach(p => p.score = 0);
-        switchView('view-setup');
-        renderPlayersList();
+        if (full) {
+            players.forEach(p => p.score = 0);
+            switchView('view-setup');
+            renderPlayersList();
+        } else {
+            // Manche suivante : on réinitialise l'état et on lance les nouveaux mots direct
+            startGame();
+        }
     }
 
     function switchView(id) {
