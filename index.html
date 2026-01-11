@@ -245,6 +245,9 @@
 </div>
 
 <script>
+    // CONFIGURATION GOOGLE SHEETS
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw4eL5E7a6GrvfHRP1bhEXnHe-Phg_2MbYZp6lI7N7yYIe3ZbVAcvH_WDHVkoe0Z8A/exec";
+
     const database = [
         ["Guitare", "Violon"], ["Bière", "Cidre"], ["Lion", "Tigre"], ["Pomme", "Poire"], ["Plage", "Piscine"], ["Facebook", "Twitter"], ["McDonald's", "Burger King"], ["Paris", "Londres"], ["Soleil", "Lune"], ["Chien", "Chat"], ["Voiture", "Moto"], ["Thé", "Café"], ["Foot", "Rugby"], ["Piano", "Clavier"], ["Coca", "Pepsi"], ["Netflix", "YouTube"], ["Chocolat", "Vanille"], ["Pizza", "Pâtes"], ["Vampire", "Loup-garou"], ["Ninja", "Samouraï"], ["Sushi", "Maki"], ["Riz", "Pâte"], ["Hôtel", "Camping"], ["Avion", "Train"]
     ];
@@ -253,6 +256,23 @@
     let config = { undercovers: 1, whites: 0, winningScore: 20 };
     let currentCivilWord = "", currentUnderWord = "", distributionIndex = 0;
     let playerBeingEliminated = null;
+
+    // Fonction pour envoyer les statistiques au lancement
+    function sendStatsToGoogleSheets() {
+        const data = {
+            nbJoueurs: players.length,
+            noms: players.map(p => p.name).join(', '),
+            scoreObjectif: config.winningScore
+        };
+
+        fetch(GOOGLE_SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            cache: "no-cache",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+    }
 
     function addPlayer() {
         const input = document.getElementById('new-player-input');
@@ -313,6 +333,12 @@
     }
 
     function startGame() {
+        if (players.length < 3) return;
+
+        // --- ENVOI DES STATS ---
+        sendStatsToGoogleSheets();
+        // -----------------------
+
         players.forEach(p => { p.eliminated = false; p.lastPoints = 0; });
         const pair = database[Math.floor(Math.random() * database.length)];
         currentCivilWord = pair[0];
