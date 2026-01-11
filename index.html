@@ -125,6 +125,15 @@
 
         .setting-box { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 18px; margin-bottom: 10px; }
         .counter-btn { background: var(--blue); color: white; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: bold; }
+        
+        .btn-delete {
+            background: rgba(231, 76, 60, 0.2);
+            color: var(--red);
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            padding: 0; margin: 0;
+            font-size: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -175,6 +184,7 @@
             </div>
         </div>
         <button class="btn-primary" id="btn-start" onclick="startGame()" disabled>LANCER LA PARTIE</button>
+        <button class="btn-red" style="padding: 12px; font-size: 0.9rem;" onclick="hardResetPlayers()">🗑️ TOUT RÉINITIALISER</button>
     </div>
 
     <div id="view-distribution" class="view">
@@ -217,9 +227,10 @@
 
     <div id="home-confirm-modal" class="modal-overlay">
         <div class="card" style="width: 100%; max-width: 400px; text-align: center;">
-            <h3>Quitter la partie ?</h3>
-            <button class="btn-red" onclick="goHome()">OUI, QUITTER</button>
-            <button class="btn-blue" onclick="closeHomeModal()">ANNULER</button>
+            <h3>Menu Principal</h3>
+            <p>Voulez-vous modifier les joueurs ou quitter la partie en cours ?</p>
+            <button class="btn-primary" onclick="goHome()">MODIFIER JOUEURS / RÉGLAGES</button>
+            <button class="btn-blue" onclick="closeHomeModal()">RETOURNER AU JEU</button>
         </div>
     </div>
 
@@ -254,12 +265,29 @@
         }
     }
 
+    function removePlayer(id) {
+        players = players.filter(p => p.id != id);
+        renderPlayersList();
+        autoAdjustRoles();
+    }
+
+    function hardResetPlayers() {
+        if(confirm("Supprimer tous les joueurs et recommencer à zéro ?")) {
+            players = [];
+            renderPlayersList();
+            autoAdjustRoles();
+        }
+    }
+
     function renderPlayersList() {
         const list = document.getElementById('players-list');
         list.innerHTML = players.map(p => `
             <div class="player-item">
-                <b>${p.name}</b>
-                <span>${p.score} pts</span>
+                <div>
+                    <b>${p.name}</b><br>
+                    <small style="opacity:0.6">${p.score} pts</small>
+                </div>
+                <button class="btn-delete" onclick="removePlayer('${p.id}')">🗑️</button>
             </div>`).join('');
         document.getElementById('btn-start').disabled = players.length < 3;
     }
@@ -423,14 +451,12 @@
         switchView('view-gameover');
     }
 
-    // FONCTION MODIFIÉE : Si "full" est faux, on relance direct startGame()
     function resetGame(full) {
         if (full) {
             players.forEach(p => p.score = 0);
             switchView('view-setup');
             renderPlayersList();
         } else {
-            // Manche suivante : on réinitialise l'état et on lance les nouveaux mots direct
             startGame();
         }
     }
@@ -443,7 +469,11 @@
 
     function confirmHome() { document.getElementById('home-confirm-modal').classList.add('active'); }
     function closeHomeModal() { document.getElementById('home-confirm-modal').classList.remove('active'); }
-    function goHome() { closeHomeModal(); resetGame(true); }
+    function goHome() { 
+        closeHomeModal(); 
+        switchView('view-setup');
+        renderPlayersList();
+    }
 </script>
 </body>
 </html>
