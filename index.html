@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Undercover Mobile Pro</title>
+    <title>Undercover Pro - Tablet & Mobile</title>
     <style>
         :root {
             --bg-color: #0f0f1e;
@@ -30,108 +30,86 @@
         }
 
         #app-container {
-            width: 100%; max-width: 500px; height: 100%;
-            display: flex; flex-direction: column;
+            width: 100%;
+            max-width: 500px; /* Mobile par défaut */
+            height: 100%;
+            display: flex;
+            flex-direction: column;
             background-color: var(--bg-color);
             padding-top: var(--safe-area-top);
+            transition: max-width 0.3s;
+        }
+
+        /* --- ADAPTATION TABLETTE --- */
+        @media (min-width: 768px) {
+            #app-container { max-width: 90%; }
+            h1 { font-size: 2.2rem !important; }
+            button { font-size: 1.5rem !important; padding: 25px !important; }
+            .player-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+            }
+            .important-zoom { font-size: 4rem !important; }
         }
 
         header {
             display: grid;
             grid-template-columns: 60px 1fr 60px;
             align-items: center;
-            padding: 10px 15px;
+            padding: 15px;
             background: rgba(0, 0, 0, 0.3);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             flex-shrink: 0;
         }
 
-        h1 { 
-            grid-column: 2; 
-            font-size: 1.4rem; 
-            color: var(--accent); 
-            margin: 0; 
-            text-transform: uppercase; 
-            letter-spacing: 2px;
-            text-align: center;
-        }
+        h1 { grid-column: 2; font-size: 1.4rem; color: var(--accent); margin: 0; text-transform: uppercase; letter-spacing: 2px; text-align: center; }
 
         #btn-home-icon {
-            grid-column: 1;
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            color: white;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer;
+            grid-column: 1; background: rgba(255, 255, 255, 0.1); border: none;
+            width: 45px; height: 45px; border-radius: 50%; font-size: 1.3rem;
+            color: white; display: flex; align-items: center; justify-content: center; cursor: pointer;
         }
 
-        .view {
-            flex-grow: 1; padding: 20px; display: none;
-            flex-direction: column; overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-        }
+        .view { flex-grow: 1; padding: 20px; display: none; flex-direction: column; overflow-y: auto; -webkit-overflow-scrolling: touch; }
         .view.active { display: flex; }
 
-        button {
-            border: none; border-radius: 16px; padding: 18px;
-            font-size: 1.2rem; font-weight: 800; width: 100%;
-            margin-bottom: 10px; transition: transform 0.05s, opacity 0.2s;
-        }
-        button:active { transform: scale(0.96); opacity: 0.8; }
+        button { border: none; border-radius: 16px; padding: 18px; font-size: 1.1rem; font-weight: 800; width: 100%; margin-bottom: 10px; cursor: pointer; }
+        button:active { transform: scale(0.98); opacity: 0.9; }
         .btn-primary { background: var(--accent); color: #000; }
         .btn-green { background: var(--green); color: #fff; }
         .btn-red { background: var(--red); color: #fff; }
         .btn-blue { background: var(--blue); color: #fff; }
+        button:disabled { opacity: 0.3; filter: grayscale(1); }
 
         input[type="text"] {
-            width: 100%; padding: 16px; border-radius: 12px;
-            border: 2px solid rgba(255,255,255,0.1);
-            background: rgba(255,255,255,0.05); color: white;
-            font-size: 1.1rem; margin-bottom: 10px; outline: none; text-align: center;
+            width: 100%; padding: 18px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05); color: white; font-size: 1.2rem; margin-bottom: 10px; outline: none; text-align: center;
         }
 
         .card { background: var(--card-bg); border-radius: 20px; padding: 20px; margin-bottom: 15px; }
 
         .player-item {
             display: flex; justify-content: space-between; align-items: center;
-            background: rgba(255,255,255,0.05);
-            padding: 16px 20px; border-radius: 12px; margin-bottom: 8px;
-            border-left: 5px solid var(--blue);
+            background: rgba(255,255,255,0.05); padding: 16px 20px; border-radius: 12px;
+            margin-bottom: 8px; border-left: 5px solid var(--blue);
         }
 
         .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
         .spacer { flex-grow: 1; }
         .text-center { text-align: center; }
 
-        .important-zoom {
-            font-size: 2.8rem;
-            font-weight: 900;
-            color: var(--green);
-            margin: 20px 0;
-            display: block;
-            text-align: center;
-            text-shadow: 0 0 15px rgba(46, 204, 113, 0.3);
-        }
-
-        .distrib-label { font-size: 1.2rem; opacity: 0.7; margin-bottom: 5px; }
+        .important-zoom { font-size: 2.8rem; font-weight: 900; color: var(--green); margin: 20px 0; display: block; text-align: center; text-shadow: 0 0 15px rgba(46, 204, 113, 0.3); }
 
         .modal-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.94); z-index: 1000;
-            display: none; flex-direction: column; justify-content: center;
-            align-items: center; padding: 30px; backdrop-filter: blur(8px);
+            background: rgba(0,0,0,0.96); z-index: 1000; display: none;
+            flex-direction: column; justify-content: center; align-items: center; padding: 30px; backdrop-filter: blur(10px);
         }
         .modal-overlay.active { display: flex; }
 
         .setting-box { background: rgba(255,255,255,0.03); padding: 18px; border-radius: 18px; margin-bottom: 12px; }
-        .counter-btn {
-            background: var(--blue); color: white; width: 45px; height: 45px;
-            border-radius: 14px; display: flex; align-items: center; justify-content: center;
-            font-size: 1.4rem; font-weight: bold;
-        }
+        .counter-btn { background: var(--blue); color: white; width: 45px; height: 45px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -149,10 +127,10 @@
                 <button class="btn-green" style="width: 70px; padding: 14px;" onclick="addPlayer()">+</button>
             </div>
         </div>
-        <div id="players-list"></div>
+        <div id="players-list" class="player-grid"></div>
         <div class="spacer"></div>
         <div id="setup-controls">
-            <div id="score-setting-container" class="setting-box row">
+            <div class="setting-box row">
                 <span>🏆 Objectif</span>
                 <div class="row">
                     <div class="counter-btn" onclick="updateScoreLimit(-5)">-</div>
@@ -160,7 +138,7 @@
                     <div class="counter-btn" onclick="updateScoreLimit(5)">+</div>
                 </div>
             </div>
-            <div id="role-setting-container" class="setting-box">
+            <div class="setting-box">
                 <div class="row" style="margin-bottom: 15px;">
                     <span>🕵️ Undercovers</span>
                     <div class="row">
@@ -179,14 +157,14 @@
                 </div>
             </div>
         </div>
-        <button class="btn-primary" id="btn-start" onclick="startGame()" disabled>LANCER LA MANCHE</button>
+        <button class="btn-primary" id="btn-start" onclick="startGame()" disabled>LANCER LA PARTIE</button>
     </div>
 
     <div id="view-distribution" class="view">
         <div class="spacer"></div>
         <div class="text-center">
-            <div class="distrib-label">Au tour de</div>
-            <div id="distrib-player-name" style="font-size: 3rem; color: var(--accent); font-weight: 900; margin-bottom: 10px;">Joueur</div>
+            <div style="font-size: 1.2rem; opacity: 0.7;">Passez l'appareil à</div>
+            <div id="distrib-player-name" style="font-size: 3.5rem; color: var(--accent); font-weight: 900; margin: 10px 0;">Joueur</div>
             <p style="opacity: 0.6;">Regarde seul ton secret</p>
         </div>
         <div id="secret-area" style="display:none;" class="card text-center"></div>
@@ -197,9 +175,9 @@
 
     <div id="view-game" class="view">
         <div class="card" style="border: 2px solid var(--green); background: rgba(46, 204, 113, 0.1);">
-            <p id="starter-name-text" class="text-center" style="margin:0; font-weight: 900; font-size: 1.2rem;"></p>
+            <p id="starter-name-text" class="text-center" style="margin:0; font-weight: 900; font-size: 1.3rem;"></p>
         </div>
-        <div id="game-players-list" style="margin-top: 15px;"></div>
+        <div id="game-players-list" class="player-grid" style="margin-top: 15px;"></div>
     </div>
 
     <div id="view-gameover" class="view">
@@ -214,20 +192,20 @@
                     <span style="opacity: 0.7;">Mot Civil :</span><br>
                     <b style="color: var(--green); font-size: 2.2rem;" id="civil-word-reveal"></b>
                 </div>
-                <div>
+                <div id="under-reveal-box">
                     <span style="opacity: 0.7;">Mot Undercover :</span><br>
                     <b style="color: var(--red); font-size: 2.2rem;" id="under-word-reveal"></b>
                 </div>
             </div>
         </div>
-        <div id="scores-list"></div>
+        <div id="scores-list" class="player-grid"></div>
         <div class="spacer"></div>
         <button id="btn-next-round" class="btn-primary" onclick="resetGame(false)">MANCHE SUIVANTE</button>
         <button id="btn-reset-all" class="btn-red" style="display:none;" onclick="resetGame(true)">NOUVELLE PARTIE</button>
     </div>
 
     <div id="home-confirm-modal" class="modal-overlay">
-        <div class="card" style="width: 100%; text-align: center;">
+        <div class="card" style="width: 100%; max-width: 400px; text-align: center;">
             <h3>Quitter la partie ?</h3>
             <button class="btn-red" onclick="goHome()">OUI, QUITTER</button>
             <button class="btn-blue" onclick="closeHomeModal()">ANNULER</button>
@@ -235,35 +213,46 @@
     </div>
 
     <div id="mr-white-modal" class="modal-overlay">
-        <div class="card" style="width: 100%; text-align: center;">
+        <div class="card" style="width: 100%; max-width: 400px; text-align: center;">
             <h2 style="color: var(--red);">DÉMASQUÉ !</h2>
             <p><b id="white-name" style="color:var(--accent)"></b>, devine le mot des civils :</p>
-            <input type="text" id="white-guess-input" placeholder="Ton guess..." autocomplete="off">
+            <input type="text" id="white-guess-input" placeholder="Ton mot..." autocomplete="off">
             <button class="btn-green" onclick="validateWhiteGuess()">VALIDER</button>
         </div>
     </div>
 </div>
 
 <script>
+    // Liste simplifiée pour l'exemple
     const database = [
-        ["Guitare", "Violon"], ["Bière", "Cidre"], ["Lion", "Tigre"], ["Pomme", "Poire"], ["Plage", "Piscine"], ["Facebook", "Twitter"], ["Harry Potter", "Seigneur des Anneaux"], ["McDonald's", "Burger King"], ["Paris", "Londres"], ["Soleil", "Lune"], ["Chien", "Chat"], ["Voiture", "Moto"], ["Thé", "Café"], ["Foot", "Rugby"], ["Piano", "Clavier"], ["Stylo", "Crayon"], ["Montre", "Horloge"], ["Bateau", "Paquebot"], ["Avion", "Hélicoptère"], ["Pantalon", "Short"], ["Chemise", "T-shirt"], ["Lunettes", "Lentilles"], ["Chaise", "Tabouret"], ["Lit", "Canapé"], ["Douche", "Bain"], ["Banane", "Kiwi"], ["Orange", "Clémentine"], ["Or", "Argent"], ["Diamant", "Rubis"], ["Coca", "Pepsi"], ["Netflix", "YouTube"], ["Uber", "Taxi"], ["Chocolat", "Vanille"], ["Pain", "Brioche"], ["Pizza", "Pâtes"], ["Fromage", "Yaourt"], ["Vin", "Champagne"], ["Noël", "Nouvel An"], ["Mariage", "PACS"], ["École", "Université"], ["Professeur", "Élève"], ["Docteur", "Infirmier"], ["Police", "Pompier"], ["Roi", "Président"], ["Château", "Manoir"], ["Forêt", "Jungle"], ["Montagne", "Colline"], ["Neige", "Glace"], ["Pluie", "Orage"], ["Vent", "Tempête"], ["Rivière", "Fleuve"], ["Désert", "Plage"], ["Volcan", "Montagne"], ["Cinéma", "Théâtre"], ["Bar", "Boîte de nuit"], ["Bibliothèque", "Librairie"], ["Musée", "Galerie"], ["Hôtel", "Camping"], ["Prison", "Cachot"], ["Abeille", "Guêpe"], ["Crocodile", "Alligator"], ["Chouette", "Hibou"], ["Cheval", "Poney"], ["Lapin", "Lièvre"], ["Dauphin", "Requin"], ["Aigle", "Faucon"], ["Moustique", "Mouche"], ["Loup", "Renard"], ["Superman", "Batman"], ["Père Noël", "Lutin"], ["Vampire", "Loup-garou"], ["Ange", "Démon"], ["Sorcier", "Magicien"], ["Pirate", "Marin"], ["Ninja", "Samouraï"], ["Savon", "Shampoing"], ["Brosse à dents", "Dentifrice"], ["Four", "Micro-ondes"], ["Frigo", "Congélateur"], ["Lampe", "Bougie"], ["Miroir", "Vitre"], ["Clé", "Serrure"], ["Ketchup", "Mayonnaise"], ["Sel", "Poivre"], ["Sucre", "Miel"], ["Crêpe", "Gaufre"], ["Pain au chocolat", "Chocolatine"], ["Sushi", "Maki"], ["Riz", "Pâte"], ["Salade", "Épinard"], ["Eau plate", "Eau gazeuse"], ["Thon", "Saumon"], ["Poulet", "Dinde"],
-        ["Tapis", "Moquette"], ["Rideau", "Store"], ["Coussin", "Oreiller"], ["Valise", "Sac à dos"], ["Montre", "Chrono"], ["Bracelet", "Bague"], ["Collier", "Pendentif"], ["Casquette", "Bonnet"], ["Gants", "Moufle"], ["Écharpe", "Foulard"], ["Parapluie", "Parasol"], ["Savon", "Gel douche"], ["Mousse", "Crème"], ["Rasoir", "Tondeuse"], ["Miroir", "Glace"], ["Peigne", "Brosse"], ["Sèche-cheveux", "Lisseur"], ["Ciseaux", "Cutter"], ["Colle", "Scotch"], ["Marteau", "Tournevis"], ["Clou", "Vis"], ["Pince", "Tenaille"], ["Scie", "Hache"], ["Pelle", "Râteau"], ["Arrosoir", "Tuyau"], ["Gazon", "Pelouse"], ["Fleur", "Plante"], ["Arbre", "Arbuste"], ["Forêt", "Bois"], ["Mer", "Océan"], ["Lac", "Étang"], ["Vague", "Marée"], ["Sable", "Galet"], ["Coquillage", "Crustacé"], ["Poisson", "Baleine"], ["Oiseau", "Papillon"], ["Fourmi", "Araignée"], ["Singe", "Gorille"], ["Éléphant", "Rhinocéros"], ["Girafe", "Zèbre"], ["Ours", "Panda"], ["Pingouin", "Manchot"], ["Kangourou", "Koala"], ["Vache", "Taureau"], ["Mouton", "Chèvre"], ["Cochon", "Sanglier"], ["Canard", "Oie"], ["Poule", "Coq"], ["Souris", "Rat"], ["Hamster", "Cochon d'inde"], ["Serpent", "Lézard"], ["Tortue", "Grenouille"], ["Escargot", "Limace"], ["Livre", "Magazine"], ["Journal", "BD"], ["Roman", "Poésie"], ["Dessin", "Peinture"], ["Photo", "Vidéo"], ["Caméra", "Appareil photo"], ["Radio", "Podcasts"], ["Musique", "Chant"], ["Danse", "Ballet"], ["Opéra", "Cirque"], ["Magie", "Illusion"], ["Jeu", "Jouet"], ["Poupée", "Figurine"], ["Puzzle", "Lego"], ["Cartes", "Dés"], ["Échecs", "Dames"], ["Billard", "Bowling"], ["Fléchettes", "Ping-pong"], ["Tennis", "Badminton"], ["Basket", "Handball"], ["Vélo", "VTT"], ["Ski", "Surf"], ["Luge", "Patin"], ["Boxe", "Karaté"], ["Yoga", "Pilates"], ["Course", "Marche"], ["Nage", "Plongée"], ["Pêche", "Chasse"], ["Cuisine", "Pâtisserie"], ["Recette", "Menu"], ["Restaurant", "Bistro"], ["Café", "Taverne"], ["Boulangerie", "Pâtisserie"], ["Boucherie", "Charcuterie"], ["Épicerie", "Marché"], ["Supermarché", "Hypermarché"], ["Boutique", "Magasin"], ["Centre commercial", "Galerie"], ["Mairie", "Préfecture"], ["Banque", "Assurance"], ["Poste", "Courrier"], ["Lettre", "Colis"], ["Timbre", "Enveloppe"], ["Téléphone", "Smartphone"], ["Tablette", "Ordinateur"], ["Écran", "Moniteur"], ["Souris", "Clavier"], ["Imprimante", "Scanner"], ["Internet", "Wifi"], ["Site", "Blog"], ["Email", "SMS"], ["Mot de passe", "Identifiant"], ["Logiciel", "Appli"], ["Fenêtre", "Porte"], ["Toit", "Mur"], ["Sol", "Plafond"], ["Escalier", "Ascenseur"], ["Balcon", "Terrasse"], ["Jardin", "Cour"], ["Garage", "Parking"], ["Cave", "Grenier"], ["Cuisine", "Salon"], ["Chambre", "Bureau"], ["Bain", "Toilette"], ["Évier", "Lavabo"], ["Robinet", "Pommeau"], ["Prise", "Interrupteur"], ["Ampoule", "Néon"], ["Radiateur", "Poêle"], ["Clim", "Ventilo"], ["Balai", "Aspirateur"], ["Chiffon", "Éponge"], ["Seau", "Bassine"], ["Lessive", "Adoucissant"], ["Fer à repasser", "Vapeur"], ["Casserole", "Poêle"], ["Marmite", "Wok"], ["Plat", "Assiette"], ["Verre", "Coupe"], ["Fourchette", "Cuillère"], ["Couteau", "Lame"], ["Serviette", "Nappe"], ["Pain", "Baguette"], ["Beurre", "Margarine"], ["Lait", "Crème"], ["Oeuf", "Omelette"], ["Farine", "Semoule"], ["Pâte", "Nouille"], ["Riz", "Grain"], ["Pomme de terre", "Frites"], ["Carotte", "Navet"], ["Tomate", "Poivron"], ["Oignon", "Ail"], ["Herbe", "Épice"], ["Sel", "Gros sel"], ["Poivre", "Piment"], ["Huile", "Vinaigre"], ["Moutarde", "Raifort"], ["Confiture", "Gelée"], ["Miel", "Sirop"], ["Gâteau", "Tarte"], ["Biscuit", "Cookie"], ["Bonbon", "Sucette"], ["Glace", "Sorbet"], ["Fruit", "Légume"], ["Jus", "Sirop"], ["Soda", "Limonade"], ["Cocktail", "Mocktail"], ["Alcool", "Spiritueux"], ["Rhum", "Whisky"], ["Vodka", "Gin"], ["Tequila", "Mezcal"], ["Lundi", "Mardi"], ["Matin", "Soir"], ["Jour", "Nuit"], ["Heure", "Minute"], ["Seconde", "Instant"], ["Hier", "Demain"], ["Semaine", "Mois"], ["Année", "Siècle"], ["Printemps", "Automne"], ["Été", "Hiver"], ["Chaud", "Froid"], ["Sec", "Humide"], ["Vite", "Lent"], ["Grand", "Petit"], ["Gros", "Mince"], ["Beau", "Joli"], ["Fort", "Puissant"], ["Riche", "Fortuné"], ["Jeune", "Vieux"], ["Nouveau", "Ancien"], ["Premier", "Dernier"], ["Vrai", "Réel"], ["Bon", "Excellent"], ["Mieux", "Meilleur"]
+        ["Guitare", "Violon"], ["Bière", "Cidre"], ["Lion", "Tigre"], ["Pomme", "Poire"], ["Plage", "Piscine"], ["Facebook", "Twitter"], ["McDonald's", "Burger King"], ["Paris", "Londres"], ["Soleil", "Lune"], ["Chien", "Chat"], ["Voiture", "Moto"], ["Thé", "Café"], ["Foot", "Rugby"], ["Piano", "Clavier"], ["Stylo", "Crayon"], ["Avion", "Hélicoptère"], ["Coca", "Pepsi"], ["Netflix", "YouTube"], ["Chocolat", "Vanille"], ["Pizza", "Pâtes"], ["Vampire", "Loup-garou"], ["Ninja", "Samouraï"], ["Sushi", "Maki"], ["Riz", "Pâte"]
     ];
 
-    let players = [], config = { undercovers: 1, whites: 0, winningScore: 20 }, currentCivilWord = "", currentUnderWord = "", distributionIndex = 0, playerBeingEliminated = null, gameInProgress = false;
+    let players = [];
+    let config = { undercovers: 1, whites: 0, winningScore: 20 };
+    let currentCivilWord = "", currentUnderWord = "", distributionIndex = 0;
+    let playerBeingEliminated = null;
+    let gameInProgress = false;
 
     function addPlayer() {
         const input = document.getElementById('new-player-input');
         const name = input.value.trim();
         if (name) {
-            players.push({ id: Date.now()+Math.random(), name, role: null, word: null, eliminated: false, score: 0, lastPoints: 0, isStarter: false });
-            input.value = ""; renderPlayersList(); autoAdjustRoles();
+            players.push({ id: Date.now() + Math.random(), name, role: null, word: null, eliminated: false, score: 0, lastPoints: 0 });
+            input.value = "";
+            renderPlayersList();
+            autoAdjustRoles();
         }
     }
 
     function renderPlayersList() {
         const list = document.getElementById('players-list');
-        list.innerHTML = players.map(p => `<div class="player-item"><b>${p.name}</b><span>${p.score} pts</span></div>`).join('');
+        list.innerHTML = players.map(p => `
+            <div class="player-item">
+                <b>${p.name}</b>
+                <span>${p.score} pts</span>
+            </div>
+        `).join('');
         document.getElementById('btn-start').disabled = players.length < 3;
     }
 
@@ -287,23 +276,33 @@
 
     function startGame() {
         gameInProgress = true;
-        players.forEach(p => { p.eliminated = false; p.lastPoints = 0; p.isStarter = false; });
+        players.forEach(p => { p.eliminated = false; p.lastPoints = 0; });
         
+        // Choisir mots
         const pair = database[Math.floor(Math.random() * database.length)];
-        currentCivilWord = pair[0]; currentUnderWord = pair[1];
+        currentCivilWord = pair[0];
+        currentUnderWord = pair[1];
 
+        // Distribuer rôles aléatoirement
         let roles = [];
         for(let i=0; i<config.undercovers; i++) roles.push('Undercover');
         for(let i=0; i<config.whites; i++) roles.push('Mr. White');
         while(roles.length < players.length) roles.push('Civil');
-        roles.sort(() => Math.random() - 0.5);
+        
+        // Mélange (Fisher-Yates)
+        for (let i = roles.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [roles[i], roles[j]] = [roles[j], roles[i]];
+        }
 
         players.forEach((p, i) => {
             p.role = roles[i];
-            p.word = (p.role === 'Civil') ? currentCivilWord : (p.role === 'Undercover' ? currentUnderWord : null);
+            p.word = (p.role === 'Civil') ? currentCivilWord : (p.role === 'Undercover' ? currentUnderWord : "???");
         });
 
-        distributionIndex = 0; switchView('view-distribution'); updateDistributionView();
+        distributionIndex = 0;
+        switchView('view-distribution');
+        updateDistributionView();
     }
 
     function updateDistributionView() {
@@ -318,35 +317,43 @@
         const p = players[distributionIndex];
         const area = document.getElementById('secret-area');
         area.style.display = 'block';
-        area.innerHTML = p.role === 'Mr. White' ? 
-            `<div class="important-zoom" style="color:var(--red)">MR. WHITE</div>` : 
-            `<div style="font-size:1.1rem; opacity:0.8; margin-top:10px;">Ton mot secret :</div>
-             <div class="important-zoom">${p.word}</div>`;
+        
+        if (p.role === 'Mr. White') {
+            area.innerHTML = `<div style="opacity:0.8">Tu es :</div><div class="important-zoom" style="color:var(--red)">MR. WHITE</div><p>Tu n'as pas de mot. Devine celui des autres !</p>`;
+        } else {
+            area.innerHTML = `<div style="opacity:0.8">Ton mot secret :</div><div class="important-zoom">${p.word}</div>`;
+        }
+        
         document.getElementById('btn-reveal').style.display = 'none';
         document.getElementById('btn-next-player').style.display = 'block';
     }
 
     function nextDistribution() {
-        if (++distributionIndex < players.length) updateDistributionView();
-        else { 
-            const civils = players.filter(p => p.role === 'Civil');
-            civils[Math.floor(Math.random() * civils.length)].isStarter = true;
-            switchView('view-game'); 
-            setupGameView(); 
+        if (++distributionIndex < players.length) {
+            updateDistributionView();
+        } else { 
+            startDiscussion();
         }
     }
 
-    function setupGameView() {
-        const starter = players.find(p => p.isStarter);
+    function startDiscussion() {
+        // Choisir qui commence : JAMAIS Mr. White, forcément un Civil
+        const civils = players.filter(p => p.role === 'Civil');
+        const starter = civils[Math.floor(Math.random() * civils.length)];
+        
         document.getElementById('starter-name-text').innerText = `🌟 ${starter.name} COMMENCE !`;
         renderGamePlayers();
+        switchView('view-game');
     }
 
     function renderGamePlayers() {
         document.getElementById('game-players-list').innerHTML = players.map(p => `
             <div class="player-item" style="${p.eliminated ? 'opacity:0.4; border-color:var(--red)' : ''}">
-                <div><b style="font-size:1.2rem">${p.name}</b> ${p.eliminated ? `<br><small style="color:var(--red)">${p.role.toUpperCase()}</small>` : ''}</div>
-                ${!p.eliminated ? `<button class="btn-red" style="width:auto; padding:10px 20px; margin:0;" onclick="attemptEliminate('${p.id}')">VOTER</button>` : '<span>❌</span>'}
+                <div>
+                    <b style="font-size:1.2rem">${p.name}</b>
+                    ${p.eliminated ? `<br><small style="color:var(--red)">${p.role.toUpperCase()}</small>` : ''}
+                </div>
+                ${!p.eliminated ? `<button class="btn-red" style="width:auto; padding:10px 20px; margin:0; font-size:0.9rem;" onclick="attemptEliminate('${p.id}')">ÉLIMINER</button>` : '<span>❌</span>'}
             </div>`).join('');
     }
 
@@ -357,41 +364,42 @@
             document.getElementById('white-name').innerText = p.name;
             document.getElementById('white-guess-input').value = "";
             document.getElementById('mr-white-modal').classList.add('active');
-        } else confirmElimination(p);
+        } else {
+            confirmElimination(p);
+        }
     }
 
     function validateWhiteGuess() {
         const guess = document.getElementById('white-guess-input').value.trim().toLowerCase();
         document.getElementById('mr-white-modal').classList.remove('active');
+        
+        // On normalize le mot civil pour la comparaison
         if (guess === currentCivilWord.toLowerCase()) {
-            playerBeingEliminated.score += 6; playerBeingEliminated.lastPoints = 6;
+            playerBeingEliminated.score += 6;
+            playerBeingEliminated.lastPoints = 6;
             endGame(`🎩 MR. WHITE (${playerBeingEliminated.name}) A GAGNÉ !`);
-        } else confirmElimination(playerBeingEliminated);
+        } else {
+            confirmElimination(playerBeingEliminated);
+        }
     }
 
     function confirmElimination(p) {
-        p.eliminated = true; renderGamePlayers(); checkWinCondition();
+        p.eliminated = true;
+        renderGamePlayers();
+        checkWinCondition();
     }
 
     function checkWinCondition() {
         const active = players.filter(p => !p.eliminated);
         const impostors = active.filter(p => p.role !== 'Civil').length;
         const civils = active.filter(p => p.role === 'Civil').length;
-        const undercovers = active.filter(p => p.role === 'Undercover').length;
-
-        // RÈGLE : 1 Undercover vs 1 Civil = Victoire Undercover
-        if (active.length === 2 && undercovers === 1 && civils === 1) {
-            active.filter(p => p.role === 'Undercover').forEach(p => { p.score += 10; p.lastPoints = 10; });
-            endGame("🕵️ VICTOIRE UNDERCOVER (Duel final !)");
-            return;
-        }
 
         if (impostors === 0) {
             players.filter(p => !p.eliminated).forEach(p => { p.score += 2; p.lastPoints = 2; });
             endGame("🎉 VICTOIRE DES CIVILS !");
-        } else if (civils === 0) {
-            players.filter(p => !p.eliminated && p.role === 'Undercover').forEach(p => { p.score += 10; p.lastPoints = 10; });
-            endGame("🕵️ VICTOIRE IMPOSTEURS !");
+        } else if (civils <= 1 && impostors >= 1) {
+            players.filter(p => !p.eliminated && p.role !== 'Civil').forEach(p => { p.score += 4; p.lastPoints = 4; });
+            endGame("🕵️ VICTOIRE DES IMPOSTEURS !");
         }
     }
 
@@ -399,11 +407,11 @@
         document.getElementById('winner-message').innerText = msg;
         document.getElementById('civil-word-reveal').innerText = currentCivilWord;
         document.getElementById('under-word-reveal').innerText = currentUnderWord;
+        
         const sorted = [...players].sort((a,b) => b.score - a.score);
         const winner = sorted.find(p => p.score >= config.winningScore);
         
         if (winner) {
-            gameInProgress = false;
             document.getElementById('grand-winner-area').style.display = 'block';
             document.getElementById('grand-winner-name').innerText = winner.name.toUpperCase();
             document.getElementById('btn-next-round').style.display = 'none';
@@ -417,16 +425,15 @@
         document.getElementById('scores-list').innerHTML = sorted.map(p => `
             <div class="player-item">
                 <div><b>${p.name}</b><br><small style="opacity:0.6">${p.role}</small></div>
-                <div style="text-align:right"><b>${p.score} / ${config.winningScore}</b>${p.lastPoints ? `<br><small style="color:var(--green)">+${p.lastPoints}</small>` : ''}</div>
+                <div style="text-align:right"><b>${p.score} pts</b>${p.lastPoints ? `<br><small style="color:var(--green)">+${p.lastPoints}</small>` : ''}</div>
             </div>`).join('');
         switchView('view-gameover');
     }
 
     function resetGame(full) {
-        if (full) { players.forEach(p => p.score = 0); gameInProgress = false; }
-        document.getElementById('score-setting-container').style.display = gameInProgress ? 'none' : 'flex';
-        document.getElementById('role-setting-container').style.display = gameInProgress ? 'none' : 'block';
-        if (!full && gameInProgress) startGame(); else { switchView('view-setup'); renderPlayersList(); }
+        if (full) { players.forEach(p => p.score = 0); }
+        switchView('view-setup');
+        renderPlayersList();
     }
 
     function switchView(id) {
