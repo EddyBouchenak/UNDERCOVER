@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Undercover Pro - Tablet & Mobile</title>
+    <title>Undercover Pro Multi-Device</title>
     <style>
         :root {
             --bg-color: #0f0f1e;
@@ -25,32 +25,35 @@
             color: var(--text);
             font-family: -apple-system, system-ui, sans-serif;
             margin: 0; padding: 0;
-            height: 100vh; display: flex; justify-content: center;
-            overflow: hidden; touch-action: manipulation;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            /* Changé pour permettre le scroll sur tous les écrans */
+            overflow-x: hidden;
+            overflow-y: auto;
         }
 
         #app-container {
             width: 100%;
-            max-width: 500px; /* Mobile par défaut */
-            height: 100%;
+            max-width: 500px; /* Taille mobile par défaut */
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             background-color: var(--bg-color);
             padding-top: var(--safe-area-top);
-            transition: max-width 0.3s;
         }
 
-        /* --- ADAPTATION TABLETTE --- */
+        /* --- ADAPTATION TABLETTE / ÉCRANS LARGES --- */
         @media (min-width: 768px) {
-            #app-container { max-width: 90%; }
-            h1 { font-size: 2.2rem !important; }
-            button { font-size: 1.5rem !important; padding: 25px !important; }
+            #app-container { max-width: 850px; }
             .player-grid {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
                 gap: 15px;
             }
-            .important-zoom { font-size: 4rem !important; }
+            h1 { font-size: 2rem !important; }
+            .important-zoom { font-size: 4.5rem !important; }
+            button { font-size: 1.4rem !important; }
         }
 
         header {
@@ -58,29 +61,40 @@
             grid-template-columns: 60px 1fr 60px;
             align-items: center;
             padding: 15px;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.4);
             border-bottom: 1px solid rgba(255,255,255,0.1);
-            flex-shrink: 0;
+            position: sticky; top: 0; z-index: 100;
         }
 
-        h1 { grid-column: 2; font-size: 1.4rem; color: var(--accent); margin: 0; text-transform: uppercase; letter-spacing: 2px; text-align: center; }
+        h1 { grid-column: 2; font-size: 1.3rem; color: var(--accent); margin: 0; text-transform: uppercase; letter-spacing: 2px; text-align: center; }
 
         #btn-home-icon {
             grid-column: 1; background: rgba(255, 255, 255, 0.1); border: none;
-            width: 45px; height: 45px; border-radius: 50%; font-size: 1.3rem;
+            width: 44px; height: 44px; border-radius: 50%; font-size: 1.2rem;
             color: white; display: flex; align-items: center; justify-content: center; cursor: pointer;
         }
 
-        .view { flex-grow: 1; padding: 20px; display: none; flex-direction: column; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+        .view { 
+            flex-grow: 1; 
+            padding: 20px; 
+            display: none; 
+            flex-direction: column;
+            width: 100%;
+        }
         .view.active { display: flex; }
 
-        button { border: none; border-radius: 16px; padding: 18px; font-size: 1.1rem; font-weight: 800; width: 100%; margin-bottom: 10px; cursor: pointer; }
-        button:active { transform: scale(0.98); opacity: 0.9; }
+        button { 
+            border: none; border-radius: 16px; padding: 20px; 
+            font-size: 1.1rem; font-weight: 800; width: 100%; 
+            margin-bottom: 12px; cursor: pointer;
+            transition: transform 0.1s;
+        }
+        button:active { transform: scale(0.97); opacity: 0.9; }
         .btn-primary { background: var(--accent); color: #000; }
         .btn-green { background: var(--green); color: #fff; }
         .btn-red { background: var(--red); color: #fff; }
         .btn-blue { background: var(--blue); color: #fff; }
-        button:disabled { opacity: 0.3; filter: grayscale(1); }
+        button:disabled { opacity: 0.2; cursor: not-allowed; }
 
         input[type="text"] {
             width: 100%; padding: 18px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.1);
@@ -93,23 +107,26 @@
             display: flex; justify-content: space-between; align-items: center;
             background: rgba(255,255,255,0.05); padding: 16px 20px; border-radius: 12px;
             margin-bottom: 8px; border-left: 5px solid var(--blue);
+            animation: fadeIn 0.3s ease;
         }
 
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
         .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-        .spacer { flex-grow: 1; }
+        .spacer { flex-grow: 1; min-height: 30px; }
         .text-center { text-align: center; }
 
-        .important-zoom { font-size: 2.8rem; font-weight: 900; color: var(--green); margin: 20px 0; display: block; text-align: center; text-shadow: 0 0 15px rgba(46, 204, 113, 0.3); }
+        .important-zoom { font-size: 3rem; font-weight: 900; color: var(--green); margin: 20px 0; display: block; text-align: center; text-shadow: 0 0 20px rgba(46, 204, 113, 0.4); }
 
         .modal-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.96); z-index: 1000; display: none;
-            flex-direction: column; justify-content: center; align-items: center; padding: 30px; backdrop-filter: blur(10px);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 1000; display: none;
+            flex-direction: column; justify-content: center; align-items: center; padding: 25px; backdrop-filter: blur(10px);
         }
         .modal-overlay.active { display: flex; }
 
-        .setting-box { background: rgba(255,255,255,0.03); padding: 18px; border-radius: 18px; margin-bottom: 12px; }
-        .counter-btn { background: var(--blue); color: white; width: 45px; height: 45px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: bold; }
+        .setting-box { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 18px; margin-bottom: 10px; }
+        .counter-btn { background: var(--blue); color: white; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -123,15 +140,17 @@
     <div id="view-setup" class="view active">
         <div class="card">
             <div class="row">
-                <input type="text" id="new-player-input" placeholder="Prénom du joueur..." autocomplete="off">
+                <input type="text" id="new-player-input" placeholder="Prénom..." autocomplete="off">
                 <button class="btn-green" style="width: 70px; padding: 14px;" onclick="addPlayer()">+</button>
             </div>
         </div>
         <div id="players-list" class="player-grid"></div>
+        
         <div class="spacer"></div>
+        
         <div id="setup-controls">
             <div class="setting-box row">
-                <span>🏆 Objectif</span>
+                <span>🏆 Objectif Score</span>
                 <div class="row">
                     <div class="counter-btn" onclick="updateScoreLimit(-5)">-</div>
                     <span id="score-limit-display" style="min-width: 40px; text-align: center; font-weight: bold;">20</span>
@@ -139,7 +158,7 @@
                 </div>
             </div>
             <div class="setting-box">
-                <div class="row" style="margin-bottom: 15px;">
+                <div class="row" style="margin-bottom: 12px;">
                     <span>🕵️ Undercovers</span>
                     <div class="row">
                         <div class="counter-btn" onclick="updateCount('undercover', -1)">-</div>
@@ -163,8 +182,8 @@
     <div id="view-distribution" class="view">
         <div class="spacer"></div>
         <div class="text-center">
-            <div style="font-size: 1.2rem; opacity: 0.7;">Passez l'appareil à</div>
-            <div id="distrib-player-name" style="font-size: 3.5rem; color: var(--accent); font-weight: 900; margin: 10px 0;">Joueur</div>
+            <div style="font-size: 1.2rem; opacity: 0.7;">Passe l'appareil à</div>
+            <div id="distrib-player-name" style="font-size: 3.5rem; color: var(--accent); font-weight: 900; margin: 15px 0;">Joueur</div>
             <p style="opacity: 0.6;">Regarde seul ton secret</p>
         </div>
         <div id="secret-area" style="display:none;" class="card text-center"></div>
@@ -187,15 +206,9 @@
         </div>
         <div class="card text-center">
             <h2 id="winner-message" style="margin: 0 0 20px 0; color: var(--accent); font-size: 1.8rem;"></h2>
-            <div style="text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
-                <div style="margin-bottom: 15px;">
-                    <span style="opacity: 0.7;">Mot Civil :</span><br>
-                    <b style="color: var(--green); font-size: 2.2rem;" id="civil-word-reveal"></b>
-                </div>
-                <div id="under-reveal-box">
-                    <span style="opacity: 0.7;">Mot Undercover :</span><br>
-                    <b style="color: var(--red); font-size: 2.2rem;" id="under-word-reveal"></b>
-                </div>
+            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+                <p>Mot Civil : <b style="color: var(--green); font-size: 1.8rem;" id="civil-word-reveal"></b></p>
+                <p>Mot Undercover : <b style="color: var(--red); font-size: 1.8rem;" id="under-word-reveal"></b></p>
             </div>
         </div>
         <div id="scores-list" class="player-grid"></div>
@@ -223,16 +236,14 @@
 </div>
 
 <script>
-    // Liste simplifiée pour l'exemple
     const database = [
-        ["Guitare", "Violon"], ["Bière", "Cidre"], ["Lion", "Tigre"], ["Pomme", "Poire"], ["Plage", "Piscine"], ["Facebook", "Twitter"], ["McDonald's", "Burger King"], ["Paris", "Londres"], ["Soleil", "Lune"], ["Chien", "Chat"], ["Voiture", "Moto"], ["Thé", "Café"], ["Foot", "Rugby"], ["Piano", "Clavier"], ["Stylo", "Crayon"], ["Avion", "Hélicoptère"], ["Coca", "Pepsi"], ["Netflix", "YouTube"], ["Chocolat", "Vanille"], ["Pizza", "Pâtes"], ["Vampire", "Loup-garou"], ["Ninja", "Samouraï"], ["Sushi", "Maki"], ["Riz", "Pâte"]
+        ["Guitare", "Violon"], ["Bière", "Cidre"], ["Lion", "Tigre"], ["Pomme", "Poire"], ["Plage", "Piscine"], ["Facebook", "Twitter"], ["McDonald's", "Burger King"], ["Paris", "Londres"], ["Soleil", "Lune"], ["Chien", "Chat"], ["Voiture", "Moto"], ["Thé", "Café"], ["Foot", "Rugby"], ["Piano", "Clavier"], ["Coca", "Pepsi"], ["Netflix", "YouTube"], ["Chocolat", "Vanille"], ["Pizza", "Pâtes"], ["Vampire", "Loup-garou"], ["Ninja", "Samouraï"], ["Sushi", "Maki"], ["Riz", "Pâte"], ["Hôtel", "Camping"], ["Avion", "Train"]
     ];
 
     let players = [];
     let config = { undercovers: 1, whites: 0, winningScore: 20 };
     let currentCivilWord = "", currentUnderWord = "", distributionIndex = 0;
     let playerBeingEliminated = null;
-    let gameInProgress = false;
 
     function addPlayer() {
         const input = document.getElementById('new-player-input');
@@ -251,8 +262,7 @@
             <div class="player-item">
                 <b>${p.name}</b>
                 <span>${p.score} pts</span>
-            </div>
-        `).join('');
+            </div>`).join('');
         document.getElementById('btn-start').disabled = players.length < 3;
     }
 
@@ -270,30 +280,25 @@
 
     function autoAdjustRoles() {
         const total = players.length;
-        config.undercovers = total <= 5 ? 1 : total <= 8 ? 2 : 3;
-        document.getElementById('count-undercover').innerText = config.undercovers;
+        if (total >= 3) {
+            config.undercovers = total <= 5 ? 1 : total <= 8 ? 2 : 3;
+            document.getElementById('count-undercover').innerText = config.undercovers;
+        }
     }
 
     function startGame() {
-        gameInProgress = true;
         players.forEach(p => { p.eliminated = false; p.lastPoints = 0; });
-        
-        // Choisir mots
         const pair = database[Math.floor(Math.random() * database.length)];
         currentCivilWord = pair[0];
         currentUnderWord = pair[1];
 
-        // Distribuer rôles aléatoirement
+        // Construction et mélange des rôles
         let roles = [];
         for(let i=0; i<config.undercovers; i++) roles.push('Undercover');
         for(let i=0; i<config.whites; i++) roles.push('Mr. White');
         while(roles.length < players.length) roles.push('Civil');
         
-        // Mélange (Fisher-Yates)
-        for (let i = roles.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [roles[i], roles[j]] = [roles[j], roles[i]];
-        }
+        roles.sort(() => Math.random() - 0.5); // Mélange simple
 
         players.forEach((p, i) => {
             p.role = roles[i];
@@ -311,6 +316,7 @@
         document.getElementById('secret-area').style.display = 'none';
         document.getElementById('btn-reveal').style.display = 'block';
         document.getElementById('btn-next-player').style.display = 'none';
+        window.scrollTo(0, 0);
     }
 
     function revealSecret() {
@@ -319,9 +325,9 @@
         area.style.display = 'block';
         
         if (p.role === 'Mr. White') {
-            area.innerHTML = `<div style="opacity:0.8">Tu es :</div><div class="important-zoom" style="color:var(--red)">MR. WHITE</div><p>Tu n'as pas de mot. Devine celui des autres !</p>`;
+            area.innerHTML = `<div style="opacity:0.8">Tu es :</div><div class="important-zoom" style="color:var(--red)">MR. WHITE</div><p>Aucun mot. Trouve celui des Civils !</p>`;
         } else {
-            area.innerHTML = `<div style="opacity:0.8">Ton mot secret :</div><div class="important-zoom">${p.word}</div>`;
+            area.innerHTML = `<div style="opacity:0.8">Ton mot :</div><div class="important-zoom">${p.word}</div>`;
         }
         
         document.getElementById('btn-reveal').style.display = 'none';
@@ -329,19 +335,16 @@
     }
 
     function nextDistribution() {
-        if (++distributionIndex < players.length) {
-            updateDistributionView();
-        } else { 
-            startDiscussion();
-        }
+        if (++distributionIndex < players.length) updateDistributionView();
+        else startDiscussion();
     }
 
     function startDiscussion() {
-        // Choisir qui commence : JAMAIS Mr. White, forcément un Civil
+        // Sélection d'un Civil au hasard pour commencer
         const civils = players.filter(p => p.role === 'Civil');
         const starter = civils[Math.floor(Math.random() * civils.length)];
         
-        document.getElementById('starter-name-text').innerText = `🌟 ${starter.name} COMMENCE !`;
+        document.getElementById('starter-name-text').innerText = `🌟 ${starter.name} commence !`;
         renderGamePlayers();
         switchView('view-game');
     }
@@ -350,10 +353,10 @@
         document.getElementById('game-players-list').innerHTML = players.map(p => `
             <div class="player-item" style="${p.eliminated ? 'opacity:0.4; border-color:var(--red)' : ''}">
                 <div>
-                    <b style="font-size:1.2rem">${p.name}</b>
-                    ${p.eliminated ? `<br><small style="color:var(--red)">${p.role.toUpperCase()}</small>` : ''}
+                    <b>${p.name}</b>
+                    ${p.eliminated ? `<br><small style="color:var(--red)">${p.role}</small>` : ''}
                 </div>
-                ${!p.eliminated ? `<button class="btn-red" style="width:auto; padding:10px 20px; margin:0; font-size:0.9rem;" onclick="attemptEliminate('${p.id}')">ÉLIMINER</button>` : '<span>❌</span>'}
+                ${!p.eliminated ? `<button class="btn-red" style="width:auto; padding:10px 15px; margin:0; font-size:0.8rem;" onclick="attemptEliminate('${p.id}')">VOTER</button>` : '<span>❌</span>'}
             </div>`).join('');
     }
 
@@ -362,25 +365,19 @@
         playerBeingEliminated = p;
         if (p.role === 'Mr. White') {
             document.getElementById('white-name').innerText = p.name;
-            document.getElementById('white-guess-input').value = "";
             document.getElementById('mr-white-modal').classList.add('active');
-        } else {
-            confirmElimination(p);
-        }
+        } else confirmElimination(p);
     }
 
     function validateWhiteGuess() {
         const guess = document.getElementById('white-guess-input').value.trim().toLowerCase();
         document.getElementById('mr-white-modal').classList.remove('active');
         
-        // On normalize le mot civil pour la comparaison
         if (guess === currentCivilWord.toLowerCase()) {
             playerBeingEliminated.score += 6;
             playerBeingEliminated.lastPoints = 6;
-            endGame(`🎩 MR. WHITE (${playerBeingEliminated.name}) A GAGNÉ !`);
-        } else {
-            confirmElimination(playerBeingEliminated);
-        }
+            endGame(`🎩 Mr. White (${playerBeingEliminated.name}) a deviné le mot !`);
+        } else confirmElimination(playerBeingEliminated);
     }
 
     function confirmElimination(p) {
@@ -396,10 +393,10 @@
 
         if (impostors === 0) {
             players.filter(p => !p.eliminated).forEach(p => { p.score += 2; p.lastPoints = 2; });
-            endGame("🎉 VICTOIRE DES CIVILS !");
-        } else if (civils <= 1 && impostors >= 1) {
+            endGame("🎉 Les Civils ont gagné !");
+        } else if (civils <= 1) {
             players.filter(p => !p.eliminated && p.role !== 'Civil').forEach(p => { p.score += 4; p.lastPoints = 4; });
-            endGame("🕵️ VICTOIRE DES IMPOSTEURS !");
+            endGame("🕵️ Les Imposteurs ont gagné !");
         }
     }
 
@@ -431,7 +428,7 @@
     }
 
     function resetGame(full) {
-        if (full) { players.forEach(p => p.score = 0); }
+        if (full) players.forEach(p => p.score = 0);
         switchView('view-setup');
         renderPlayersList();
     }
@@ -439,6 +436,7 @@
     function switchView(id) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.getElementById(id).classList.add('active');
+        window.scrollTo(0, 0);
     }
 
     function confirmHome() { document.getElementById('home-confirm-modal').classList.add('active'); }
