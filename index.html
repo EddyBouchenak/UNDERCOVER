@@ -248,8 +248,17 @@
     // CONFIGURATION GOOGLE SHEETS
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw4eL5E7a6GrvfHRP1bhEXnHe-Phg_2MbYZp6lI7N7yYIe3ZbVAcvH_WDHVkoe0Z8A/exec";
 
+    // PAIRES FILTRÉES ET NOUVELLES PAIRES AJOUTÉES
     const database = [
-        ["Guitare", "Violon"], ["Bière", "Cidre"], ["Lion", "Tigre"], ["Pomme", "Poire"], ["Plage", "Piscine"], ["Facebook", "Twitter"], ["McDonald's", "Burger King"], ["Paris", "Londres"], ["Soleil", "Lune"], ["Chien", "Chat"], ["Voiture", "Moto"], ["Thé", "Café"], ["Foot", "Rugby"], ["Piano", "Clavier"], ["Coca", "Pepsi"], ["Netflix", "YouTube"], ["Chocolat", "Vanille"], ["Pizza", "Pâtes"], ["Vampire", "Loup-garou"], ["Ninja", "Samouraï"], ["Sushi", "Maki"], ["Riz", "Pâte"], ["Hôtel", "Camping"], ["Avion", "Train"]
+        ["Guitare", "Violon"], ["Bière", "Cidre"], ["Lion", "Tigre"], ["Pomme", "Poire"],
+        ["Facebook", "Twitter"], ["Paris", "Londres"], ["Soleil", "Lune"],
+        ["Chien", "Chat"], ["Thé", "Café"], ["Foot", "Rugby"], ["Piano", "Clavier"],
+        ["Netflix", "YouTube"], ["Pizza", "Pâtes"], ["Sushi", "Maki"],
+        ["Riz", "Pâte"], ["Hôtel", "Camping"],
+        // Nouveaux mots neutres pour remplacer ceux supprimés :
+        ["Stylo", "Crayon"], ["Montagne", "Forêt"], ["Chemise", "T-shirt"],
+        ["Or", "Argent"], ["Banane", "Ananas"], ["Chaise", "Tabouret"],
+        ["Lait", "Yaourt"], ["Bateau", "Barque"]
     ];
 
     let players = [];
@@ -415,6 +424,9 @@
         playerBeingEliminated = p;
         if (p.role === 'Mr. White') {
             document.getElementById('white-name').innerText = p.name;
+            // --- MODIFICATION ICI : On vide la case avant d'afficher ---
+            document.getElementById('white-guess-input').value = ""; 
+            // -----------------------------------------------------------
             document.getElementById('mr-white-modal').classList.add('active');
         } else confirmElimination(p);
     }
