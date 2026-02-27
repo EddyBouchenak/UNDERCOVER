@@ -248,14 +248,12 @@
     // CONFIGURATION GOOGLE SHEETS
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw4eL5E7a6GrvfHRP1bhEXnHe-Phg_2MbYZp6lI7N7yYIe3ZbVAcvH_WDHVkoe0Z8A/exec";
 
-    // PAIRES FILTRÉES ET NOUVELLES PAIRES AJOUTÉES
     const database = [
         ["Guitare", "Violon"], ["Bière", "Cidre"], ["Lion", "Tigre"], ["Pomme", "Poire"],
         ["Facebook", "Twitter"], ["Paris", "Londres"], ["Soleil", "Lune"],
         ["Chien", "Chat"], ["Thé", "Café"], ["Foot", "Rugby"], ["Piano", "Clavier"],
         ["Netflix", "YouTube"], ["Pizza", "Pâtes"], ["Sushi", "Maki"],
         ["Riz", "Pâte"], ["Hôtel", "Camping"],
-        // Nouveaux mots neutres pour remplacer ceux supprimés :
         ["Stylo", "Crayon"], ["Montagne", "Forêt"], ["Chemise", "T-shirt"],
         ["Or", "Argent"], ["Banane", "Ananas"], ["Chaise", "Tabouret"],
         ["Lait", "Yaourt"], ["Bateau", "Barque"]
@@ -265,15 +263,16 @@
     let config = { undercovers: 1, whites: 0, winningScore: 20 };
     let currentCivilWord = "", currentUnderWord = "", distributionIndex = 0;
     let playerBeingEliminated = null;
+    
+    // --- NOUVELLE VARIABLE : Historique des mots utilisés ---
+    let usedPairsIndexes = [];
 
-    // Fonction pour envoyer les statistiques au lancement
     function sendStatsToGoogleSheets() {
         const data = {
             nbJoueurs: players.length,
             noms: players.map(p => p.name).join(', '),
             scoreObjectif: config.winningScore
         };
-
         fetch(GOOGLE_SCRIPT_URL, {
             method: "POST",
             mode: "no-cors",
@@ -303,6 +302,7 @@
     function hardResetPlayers() {
         if(confirm("Supprimer tous les joueurs et recommencer à zéro ?")) {
             players = [];
+            usedPairsIndexes = []; // Reset historique
             renderPlayersList();
             autoAdjustRoles();
         }
@@ -341,15 +341,32 @@
         }
     }
 
+    // --- LOGIQUE DE SÉLECTION DE MOTS SANS DOUBLONS ---
+    function pickNewPair() {
+        // Si on a épuisé tous les mots de la liste, on vide l'historique
+        if (usedPairsIndexes.length >= database.length) {
+            usedPairsIndexes = [];
+            console.log("Toutes les paires ont été jouées. Réinitialisation de l'historique.");
+        }
+
+        let randomIndex;
+        do {
+            randomIndex = Math.floor(Math.random() * database.length);
+        } while (usedPairsIndexes.includes(randomIndex));
+
+        usedPairsIndexes.push(randomIndex);
+        return database[randomIndex];
+    }
+
     function startGame() {
         if (players.length < 3) return;
 
-        // --- ENVOI DES STATS ---
         sendStatsToGoogleSheets();
-        // -----------------------
 
         players.forEach(p => { p.eliminated = false; p.lastPoints = 0; });
-        const pair = database[Math.floor(Math.random() * database.length)];
+        
+        // Utilisation de la nouvelle fonction de pioche
+        const pair = pickNewPair();
         currentCivilWord = pair[0];
         currentUnderWord = pair[1];
 
@@ -424,9 +441,7 @@
         playerBeingEliminated = p;
         if (p.role === 'Mr. White') {
             document.getElementById('white-name').innerText = p.name;
-            // --- MODIFICATION ICI : On vide la case avant d'afficher ---
             document.getElementById('white-guess-input').value = ""; 
-            // -----------------------------------------------------------
             document.getElementById('mr-white-modal').classList.add('active');
         } else confirmElimination(p);
     }
@@ -492,6 +507,7 @@
     function resetGame(full) {
         if (full) {
             players.forEach(p => p.score = 0);
+            usedPairsIndexes = []; // Reset aussi l'historique quand on recommence tout
             switchView('view-setup');
             renderPlayersList();
         } else {
